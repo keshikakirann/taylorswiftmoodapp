@@ -1,246 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Taylor Swift Song Recommender Bot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #fdf6f9;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaylorSwiftify - Spotify Vibes</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-        .chat-container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+    :root {
+      --bg-color: #121212;
+      --text-color: #fff;
+      --accent-color: #d8b4fe; /* lavender vibe */
+      --secondary-color: #b3b3b3;
+      --button-bg: #bb86fc;
+      --button-hover: #9f6efc;
+      --font-family: 'Poppins', sans-serif;
+      --shadow-color: rgba(216, 180, 254, 0.6);
+    }
 
-        .chat-header {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #c71585;
-            margin-bottom: 20px;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      padding: 20px;
+      text-align: center;
+      user-select: none;
+    }
 
-        .message {
-            margin-bottom: 15px;
-        }
+    h1 {
+      font-weight: 700;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+      text-shadow: 0 0 10px var(--shadow-color);
+      font-style: italic;
+    }
 
-        .user-message {
-            text-align: right;
-            color: #444;
-        }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 0 12px var(--shadow-color);
+      border-radius: 50px;
+      overflow: hidden;
+      background: #222;
+      transition: box-shadow 0.3s ease;
+    }
+    .search-container:hover {
+      box-shadow: 0 0 20px var(--accent-color);
+    }
 
-        .bot-message {
-            text-align: left;
-            color: #444;
-        }
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      font-size: 1.1rem;
+      outline: none;
+      background: transparent;
+      color: var(--text-color);
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+    input[type="text"]::placeholder {
+      color: var(--secondary-color);
+    }
 
-        .chat-input {
-            display: flex;
-        }
+    button {
+      background-color: var(--button-bg);
+      border: none;
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 0 50px 50px 0;
+      font-style: italic;
+      box-shadow: 0 0 10px var(--shadow-color);
+      letter-spacing: 0.05em;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+      box-shadow: 0 0 20px var(--accent-color);
+    }
 
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+    .output-container {
+      max-width: 450px;
+      width: 100%;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px var(--shadow-color);
+      font-size: 1.1rem;
+      font-weight: 400;
+      min-height: 120px;
+      color: var(--accent-color);
+      font-style: italic;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      user-select: text;
+    }
 
-        .chat-input button {
-            background: #c71585;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            margin-left: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .chat-input button:hover {
-            background: #a31470;
-        }
-
-        .typing-indicator {
-            font-style: italic;
-            color: #999;
-            margin-top: 10px;
-        }
-
-        .song-recommendation {
-            background: #f9e6f0;
-            padding: 10px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-
-        .song-title {
-            font-weight: bold;
-            color: #c71585;
-        }
-
-        .music-links {
-            margin-top: 10px;
-        }
-
-        .music-link {
-            display: inline-block;
-            margin-right: 10px;
-            text-decoration: none;
-            color: #fff;
-            background: #c71585;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .music-link:hover {
-            background: #a31470;
-        }
-    </style>
+    /* subtle animation on output text */
+    .output-container.fade-in {
+      animation: fadeInText 0.5s ease forwards;
+    }
+    @keyframes fadeInText {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">Taylor Swift Song Recommender 💖</div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="typing-indicator" id="typingIndicator" style="display: none;">Typing...</div>
-        <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Tell me how you're feeling..." />
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
+  <h1>TaylorSwiftify</h1>
 
-    <script>
-        const chatInput = document.getElementById('chatInput');
-        const chatMessages = document.getElementById('chatMessages');
-        const typingIndicator = document.getElementById('typingIndicator');
+  <div class="search-container">
+    <input id="search-input" type="text" placeholder="Type your query here..." />
+    <button id="search-btn">Search</button>
+  </div>
 
-        const songDatabase = {
-            happy: [
-                { title: "Shake It Off", artist: "Taylor Swift" },
-                { title: "You Belong With Me", artist: "Taylor Swift" },
-                { title: "22", artist: "Taylor Swift" },
-            ],
-            sad: [
-                { title: "All Too Well", artist: "Taylor Swift" },
-                { title: "The Archer", artist: "Taylor Swift" },
-                { title: "My Tears Ricochet", artist: "Taylor Swift" },
-            ],
-            angry: [
-                { title: "Look What You Made Me Do", artist: "Taylor Swift" },
-                { title: "Vigilante Shit", artist: "Taylor Swift" },
-                { title: "Bad Blood", artist: "Taylor Swift" },
-            ],
-            nostalgic: [
-                { title: "Enchanted", artist: "Taylor Swift" },
-                { title: "Tim McGraw", artist: "Taylor Swift" },
-                { title: "Back to December", artist: "Taylor Swift" },
-            ],
-            empowered: [
-                { title: "The Man", artist: "Taylor Swift" },
-                { title: "Bejeweled", artist: "Taylor Swift" },
-                { title: "I Did Something Bad", artist: "Taylor Swift" },
-            ]
-        };
+  <div id="output" class="output-container">
+    Your results will appear here, darling...
+  </div>
 
-        function sendMessage() {
-            const userMessage = chatInput.value.trim();
-            if (!userMessage) return;
+  <script>
+    const searchBtn = document.getElementById('search-btn');
+    const searchInput = document.getElementById('search-input');
+    const output = document.getElementById('output');
 
-            // Display user message
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.classList.add('message', 'user-message');
-            userMessageDiv.innerText = userMessage;
-            chatMessages.appendChild(userMessageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    function displayResult(text) {
+      output.textContent = text;
+      output.classList.remove('fade-in');
+      void output.offsetWidth; // trigger reflow for restart animation
+      output.classList.add('fade-in');
+    }
 
-            chatInput.value = '';
-            typingIndicator.style.display = 'block';
+    searchBtn.addEventListener('click', () => {
+      const query = searchInput.value.trim();
+      if (!query) {
+        displayResult("Hey, don't leave me hanging! Enter something.");
+        return;
+      }
+      // This is where your actual search / backend call would happen
+      // For demo, just echoing the query:
+      displayResult(`You asked for: "${query}"\n\nBut alas, the search is just a demo...`);
+    });
 
-            // Simulate thinking
-            setTimeout(() => {
-                const mood = detectMood(userMessage.toLowerCase());
-                const songs = songDatabase[mood] || songDatabase["sad"];
-                const song = songs[Math.floor(Math.random() * songs.length)];
-
-                displayBotMessage(song, mood);
-            }, 1000);
-        }
-
-        function detectMood(text) {
-            const moodKeywords = {
-                happy: ["happy", "joy", "excited", "cheerful", "good", "great"],
-                sad: ["sad", "down", "depressed", "heartbroken", "blue", "crying"],
-                angry: ["angry", "mad", "furious", "pissed", "raging"],
-                nostalgic: ["nostalgic", "memory", "remember", "past", "childhood"],
-                empowered: ["confident", "empowered", "strong", "independent", "badass"]
-            };
-
-            for (const [mood, keywords] of Object.entries(moodKeywords)) {
-                if (keywords.some(word => text.includes(word))) {
-                    return mood;
-                }
-            }
-
-            return "sad"; // fallback mood
-        }
-
-        function displayBotMessage(song, mood) {
-            typingIndicator.style.display = 'none';
-
-            const botMessageDiv = document.createElement('div');
-            botMessageDiv.classList.add('message', 'bot-message');
-            
-            const recommendation = document.createElement('div');
-            recommendation.classList.add('song-recommendation');
-
-            const title = document.createElement('div');
-            title.classList.add('song-title');
-            title.innerText = `🎶 ${song.title} by ${song.artist}`;
-
-            const moodNote = document.createElement('p');
-            moodNote.innerText = `Based on your vibe (${mood}), I think you'll love this.`;
-
-            const links = document.createElement('div');
-            links.classList.add('music-links');
-
-            const spotifyLink = document.createElement('a');
-            spotifyLink.href = `https://open.spotify.com/search/${encodeURIComponent(song.title + ' ' + song.artist)}`;
-            spotifyLink.target = "_blank";
-            spotifyLink.classList.add('music-link');
-            spotifyLink.innerText = 'Spotify';
-
-            const youtubeLink = document.createElement('a');
-            youtubeLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(song.title + ' ' + song.artist)}`;
-            youtubeLink.target = "_blank";
-            youtubeLink.classList.add('music-link');
-            youtubeLink.innerText = 'YouTube';
-
-            const appleLink = document.createElement('a');
-            appleLink.href = `https://music.apple.com/us/search?term=${encodeURIComponent(song.title + ' ' + song.artist)}`;
-            appleLink.target = "_blank";
-            appleLink.classList.add('music-link');
-            appleLink.innerText = 'Apple Music';
-
-            links.append(spotifyLink, youtubeLink, appleLink);
-            recommendation.append(title, moodNote, links);
-            botMessageDiv.appendChild(recommendation);
-            chatMessages.appendChild(botMessageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-    </script>
+    // Enter key support
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        searchBtn.click();
+      }
+    });
+  </script>
 </body>
 </html>
