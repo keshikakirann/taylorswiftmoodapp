@@ -2,542 +2,245 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Taylor's Song Assistant</title>
+    <title>Taylor Swift Song Recommender Bot</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
+            background: #fdf6f9;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
-        
-        body {
-            font-family: 'Playfair Display', serif;
-            background: linear-gradient(135deg, #ff0080, #ff66b3, #ffb3d9);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #ff66b3;
-        }
-
-        .header h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: 2.5em;
-            color: #ff66b3;
-            margin-bottom: 5px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            color: #ff66b3;
-            font-style: italic;
-            font-weight: 400;
         }
 
         .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .chat-header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #c71585;
+            margin-bottom: 20px;
         }
 
         .chat-messages {
-            flex: 1;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
             margin-bottom: 20px;
-            border: 2px solid #ff66b3;
         }
 
         .message {
-            margin-bottom: 20px;
-            padding: 15px 20px;
-            border-radius: 15px;
-            max-width: 80%;
-            animation: fadeIn 0.3s ease-in;
+            margin-bottom: 15px;
         }
 
         .user-message {
-            background: linear-gradient(135deg, #ff66b3, #ff0080);
-            color: white;
-            margin-left: auto;
             text-align: right;
+            color: #444;
         }
 
         .bot-message {
-            background: rgba(255, 255, 255, 0.9);
-            color: #ff0080;
-            border: 2px solid #ff66b3;
+            text-align: left;
+            color: #444;
+        }
+
+        .chat-input {
+            display: flex;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .chat-input button {
+            background: #c71585;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #a31470;
+        }
+
+        .typing-indicator {
+            font-style: italic;
+            color: #999;
+            margin-top: 10px;
         }
 
         .song-recommendation {
-            background: rgba(255, 102, 179, 0.1);
-            border: 2px solid #ff66b3;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-        }
-
-        .song-recommendation:hover {
-            background: rgba(255, 102, 179, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: #f9e6f0;
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
         }
 
         .song-title {
             font-weight: bold;
-            font-size: 1.1em;
-            color: #ff0080;
-            margin-bottom: 5px;
+            color: #c71585;
         }
 
         .music-links {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-            flex-wrap: wrap;
+            margin-top: 10px;
         }
 
         .music-link {
             display: inline-block;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            margin-right: 10px;
             text-decoration: none;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-            text-align: center;
-            min-width: 80px;
+            color: #fff;
+            background: #c71585;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
-        .spotify-link {
-            background: #1DB954;
-        }
-
-        .spotify-link:hover {
-            background: #1ed760;
-            transform: scale(1.05);
-        }
-
-        .youtube-link {
-            background: #FF0000;
-        }
-
-        .youtube-link:hover {
-            background: #ff3333;
-            transform: scale(1.05);
-        }
-
-        .apple-link {
-            background: #000000;
-        }
-
-        .apple-link:hover {
-            background: #333333;
-            transform: scale(1.05);
-        }
-
-        .input-container {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 3px solid #ff66b3;
-            border-radius: 25px;
-            font-size: 1em;
-            font-family: 'Playfair Display', serif;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            resize: none;
-            min-height: 50px;
-            max-height: 120px;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #ff0080;
-            background: white;
-        }
-
-        .send-button {
-            background: linear-gradient(135deg, #ff66b3, #ff0080);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .send-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 128, 0.4);
-        }
-
-        .send-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 10px 20px;
-            color: #ff66b3;
-            font-style: italic;
-        }
-
-        .typing-dots {
-            display: inline-block;
-        }
-
-        .typing-dots::after {
-            content: '';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .welcome-message {
-            text-align: center;
-            color: #ff66b3;
-            font-style: italic;
-            padding: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-                margin: 10px;
-                height: 95vh;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .message {
-                max-width: 90%;
-            }
+        .music-link:hover {
+            background: #a31470;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎵 Taylor's Song Assistant 🎵</h1>
-            <p>Tell me how you're feeling, and I'll find the perfect Taylor Swift song for you!</p>
-        </div>
-
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="welcome-message">
-                    <p>Hi there, Swiftie! 💜 Tell me about your mood or how you're feeling right now, and I'll recommend the perfect Taylor Swift songs for you. You can even listen to them on Spotify!</p>
-                    <p style="margin-top: 10px; font-size: 0.9em;">Try saying things like "I'm feeling really sad today" or "I'm so happy and excited!" or "I just went through a breakup"</p>
-                </div>
-            </div>
-
-            <div class="typing-indicator" id="typingIndicator">
-                Taylor's Assistant is typing<span class="typing-dots"></span>
-            </div>
-
-            <div class="input-container">
-                <textarea 
-                    class="chat-input" 
-                    id="chatInput" 
-                    placeholder="Tell me how you're feeling..."
-                    rows="1"
-                ></textarea>
-                <button class="send-button" id="sendButton" onclick="sendMessage()">
-                    Send ✨
-                </button>
-            </div>
+    <div class="chat-container">
+        <div class="chat-header">Taylor Swift Song Recommender 💖</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">Typing...</div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Tell me how you're feeling..." />
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        // Enhanced song database with multiple listening options
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const typingIndicator = document.getElementById('typingIndicator');
+
         const songDatabase = {
-            "happy": [
+            happy: [
+                { title: "Shake It Off", artist: "Taylor Swift" },
+                { title: "You Belong With Me", artist: "Taylor Swift" },
                 { title: "22", artist: "Taylor Swift" },
-                { title: "Shake It Off", artist: "Taylor Swift" },
-                { title: "ME! (feat. Brendon Urie)", artist: "Taylor Swift" },
-                { title: "Paper Rings", artist: "Taylor Swift" },
-                { title: "Love Story", artist: "Taylor Swift" },
-                { title: "The Best Day", artist: "Taylor Swift" },
-                { title: "Our Song", artist: "Taylor Swift" }
             ],
-            "sad": [
+            sad: [
                 { title: "All Too Well", artist: "Taylor Swift" },
-                { title: "Death by a Thousand Cuts", artist: "Taylor Swift" },
-                { title: "Soon You'll Get Better (feat. Dixie Chicks)", artist: "Taylor Swift" },
-                { title: "champagne problems", artist: "Taylor Swift" },
-                { title: "right where you left me", artist: "Taylor Swift" },
-                { title: "White Horse", artist: "Taylor Swift" }
+                { title: "The Archer", artist: "Taylor Swift" },
+                { title: "My Tears Ricochet", artist: "Taylor Swift" },
             ],
-            "angry": [
-                { title: "Bad Blood", artist: "Taylor Swift" },
+            angry: [
                 { title: "Look What You Made Me Do", artist: "Taylor Swift" },
-                { title: "mad woman", artist: "Taylor Swift" },
-                { title: "Better Than Revenge", artist: "Taylor Swift" },
-                { title: "We Are Never Ever Getting Back Together", artist: "Taylor Swift" },
-                { title: "my tears ricochet", artist: "Taylor Swift" }
+                { title: "Vigilante Shit", artist: "Taylor Swift" },
+                { title: "Bad Blood", artist: "Taylor Swift" },
             ],
-            "nostalgic": [
-                { title: "All Too Well", artist: "Taylor Swift" },
-                { title: "Fifteen", artist: "Taylor Swift" },
-                { title: "Long Live", artist: "Taylor Swift" },
-                { title: "Never Grow Up", artist: "Taylor Swift" },
-                { title: "seven", artist: "Taylor Swift" },
-                { title: "cardigan", artist: "Taylor Swift" }
-            ],
-            "empowered": [
-                { title: "Shake It Off", artist: "Taylor Swift" },
-                { title: "The Man", artist: "Taylor Swift" },
-                { title: "Anti-Hero", artist: "Taylor Swift" },
-                { title: "Mastermind", artist: "Taylor Swift" },
-                { title: "Karma", artist: "Taylor Swift" },
-                { title: "Vigilante Shit", artist: "Taylor Swift" }
-            ],
-            "romantic": [
-                { title: "Love Story", artist: "Taylor Swift" },
+            nostalgic: [
                 { title: "Enchanted", artist: "Taylor Swift" },
-                { title: "Lover", artist: "Taylor Swift" },
-                { title: "Invisible String", artist: "Taylor Swift" },
-                { title: "Sweet Nothing", artist: "Taylor Swift" },
-                { title: "Daylight", artist: "Taylor Swift" }
+                { title: "Tim McGraw", artist: "Taylor Swift" },
+                { title: "Back to December", artist: "Taylor Swift" },
             ],
-            "heartbroken": [
-                { title: "All Too Well (10 Minute Version)", artist: "Taylor Swift" },
-                { title: "Last Kiss", artist: "Taylor Swift" },
-                { title: "champagne problems", artist: "Taylor Swift" },
-                { title: "happiness", artist: "Taylor Swift" },
-                { title: "Death by a Thousand Cuts", artist: "Taylor Swift" },
-                { title: "White Horse", artist: "Taylor Swift" }
-            ],
-            "confident": [
-                { title: "I Did Something Bad", artist: "Taylor Swift" },
-                { title: "Getaway Car", artist: "Taylor Swift" },
-                { title: "Delicate", artist: "Taylor Swift" },
+            empowered: [
+                { title: "The Man", artist: "Taylor Swift" },
                 { title: "Bejeweled", artist: "Taylor Swift" },
-                { title: "Lavender Haze", artist: "Taylor Swift" }
-            ],
-            "melancholic": [
-                { title: "cardigan", artist: "Taylor Swift" },
-                { title: "hoax", artist: "Taylor Swift" },
-                { title: "right where you left me", artist: "Taylor Swift" },
-                { title: "happiness", artist: "Taylor Swift" },
-                { title: "Soon You'll Get Better", artist: "Taylor Swift" }
+                { title: "I Did Something Bad", artist: "Taylor Swift" },
             ]
         };
 
-        // Mood detection keywords
-        const moodKeywords = {
-            "happy": ["happy", "joyful", "excited", "cheerful", "good", "great", "amazing", "wonderful", "fantastic", "upbeat", "positive", "celebrating", "party", "fun"],
-            "sad": ["sad", "down", "depressed", "blue", "crying", "tears", "upset", "gloomy", "sorrowful", "hurt", "pain", "lonely"],
-            "angry": ["angry", "mad", "furious", "pissed", "annoyed", "frustrated", "rage", "hate", "bitter", "resentful", "irritated"],
-            "nostalgic": ["miss", "nostalgia", "remember", "past", "memories", "childhood", "old times", "used to", "back then", "reminiscing"],
-            "empowered": ["strong", "powerful", "confident", "unstoppable", "fierce", "independent", "boss", "queen", "strength", "motivated"],
-            "romantic": ["love", "romance", "crush", "relationship", "dating", "boyfriend", "girlfriend", "partner", "valentine", "romantic"],
-            "heartbroken": ["heartbroken", "breakup", "broke up", "dumped", "left me", "cheated", "betrayed", "lost love", "ended", "over"],
-            "confident": ["confident", "self-assured", "proud", "accomplished", "success", "winning", "achieved", "bold", "fearless"],
-            "melancholic": ["melancholy", "wistful", "bittersweet", "contemplative", "reflective", "pensive", "thoughtful", "quiet"]
-        };
+        function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+
+            // Display user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('message', 'user-message');
+            userMessageDiv.innerText = userMessage;
+            chatMessages.appendChild(userMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            chatInput.value = '';
+            typingIndicator.style.display = 'block';
+
+            // Simulate thinking
+            setTimeout(() => {
+                const mood = detectMood(userMessage.toLowerCase());
+                const songs = songDatabase[mood] || songDatabase["sad"];
+                const song = songs[Math.floor(Math.random() * songs.length)];
+
+                displayBotMessage(song, mood);
+            }, 1000);
+        }
 
         function detectMood(text) {
-            const lowerText = text.toLowerCase();
-            let moodScores = {};
-            
-            // Initialize scores
-            Object.keys(moodKeywords).forEach(mood => {
-                moodScores[mood] = 0;
-            });
-            
-            // Score based on keywords
-            Object.entries(moodKeywords).forEach(([mood, keywords]) => {
-                keywords.forEach(keyword => {
-                    if (lowerText.includes(keyword)) {
-                        moodScores[mood] += 1;
-                    }
-                });
-            });
-            
-            // Find the mood with highest score
-            let detectedMood = null;
-            let maxScore = 0;
-            Object.entries(moodScores).forEach(([mood, score]) => {
-                if (score > maxScore) {
-                    maxScore = score;
-                    detectedMood = mood;
-                }
-            });
-            
-            // If no clear mood detected, try to infer from common phrases
-            if (!detectedMood) {
-                if (lowerText.includes("feel") || lowerText.includes("feeling")) {
-                    if (lowerText.includes("good") || lowerText.includes("great")) detectedMood = "happy";
-                    else if (lowerText.includes("bad") || lowerText.includes("terrible")) detectedMood = "sad";
-                }
-            }
-            
-            return detectedMood || "happy"; // Default to happy if no mood detected
-        }
-
-        function getRandomSongs(mood, count = 3) {
-            const songs = songDatabase[mood] || songDatabase["happy"];
-            const shuffled = [...songs].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
-        }
-
-        function addMessage(content, isUser = false) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            messageDiv.innerHTML = content;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'block';
-        }
-
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'none';
-        }
-
-        function createMusicLinks(song) {
-            const encodedTitle = encodeURIComponent(`${song.title} ${song.artist}`);
-            
-            return `
-                <div class="music-links">
-                    <a href="https://open.spotify.com/search/${encodedTitle}" target="_blank" class="music-link spotify-link">
-                        🎵 Spotify
-                    </a>
-                    <a href="https://music.youtube.com/search?q=${encodedTitle}" target="_blank" class="music-link youtube-link">
-                        ▶️ YouTube
-                    </a>
-                    <a href="https://music.apple.com/search?term=${encodedTitle}" target="_blank" class="music-link apple-link">
-                        🎵 Apple
-                    </a>
-                </div>
-            `;
-        }
-
-        function generateResponse(userInput) {
-            const detectedMood = detectMood(userInput);
-            const songs = getRandomSongs(detectedMood, 3);
-            
-            const moodResponses = {
-                "happy": "I love that you're feeling so positive! Here are some upbeat Taylor songs to match your energy:",
-                "sad": "I'm sorry you're going through a tough time. These Taylor songs might help you process those feelings:",
-                "angry": "Sometimes we need to feel our anger! These fierce Taylor tracks are perfect for your mood:",
-                "nostalgic": "There's something beautiful about looking back. These nostalgic Taylor songs will resonate with you:",
-                "empowered": "Yes! Channel that powerful energy with these empowering Taylor Swift anthems:",
-                "romantic": "Love is in the air! Here are some of Taylor's most romantic songs for you:",
-                "heartbroken": "Heartbreak is so hard, but you're not alone. These Taylor songs will help you heal:",
-                "confident": "I love your confidence! These Taylor tracks will keep that energy flowing:",
-                "melancholic": "Sometimes we need to sit with our feelings. These contemplative Taylor songs are perfect:",
+            const moodKeywords = {
+                happy: ["happy", "joy", "excited", "cheerful", "good", "great"],
+                sad: ["sad", "down", "depressed", "heartbroken", "blue", "crying"],
+                angry: ["angry", "mad", "furious", "pissed", "raging"],
+                nostalgic: ["nostalgic", "memory", "remember", "past", "childhood"],
+                empowered: ["confident", "empowered", "strong", "independent", "badass"]
             };
-            
-            let response = moodResponses[detectedMood] || "Here are some great Taylor Swift songs for you:";
-            
-            songs.forEach(song => {
-                response += `
-                    <div class="song-recommendation">
-                        <div class="song-title">♪ "${song.title}"</div>
-                        ${createMusicLinks(song)}
-                    </div>
-                `;
-            });
-            
-            return response;
-        }
 
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // Add user message
-            addMessage(message, true);
-            
-            // Clear input
-            input.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            // Simulate AI thinking time
-            setTimeout(() => {
-                hideTypingIndicator();
-                
-                // Generate and add bot response
-                const response = generateResponse(message);
-                addMessage(response);
-            }, 1500);
-        }
-
-        // Event listeners
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+            for (const [mood, keywords] of Object.entries(moodKeywords)) {
+                if (keywords.some(word => text.includes(word))) {
+                    return mood;
+                }
             }
-        });
 
-        // Auto-resize textarea
-        document.getElementById('chatInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
+            return "sad"; // fallback mood
+        }
+
+        function displayBotMessage(song, mood) {
+            typingIndicator.style.display = 'none';
+
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.classList.add('message', 'bot-message');
+            
+            const recommendation = document.createElement('div');
+            recommendation.classList.add('song-recommendation');
+
+            const title = document.createElement('div');
+            title.classList.add('song-title');
+            title.innerText = `🎶 ${song.title} by ${song.artist}`;
+
+            const moodNote = document.createElement('p');
+            moodNote.innerText = `Based on your vibe (${mood}), I think you'll love this.`;
+
+            const links = document.createElement('div');
+            links.classList.add('music-links');
+
+            const spotifyLink = document.createElement('a');
+            spotifyLink.href = `https://open.spotify.com/search/${encodeURIComponent(song.title + ' ' + song.artist)}`;
+            spotifyLink.target = "_blank";
+            spotifyLink.classList.add('music-link');
+            spotifyLink.innerText = 'Spotify';
+
+            const youtubeLink = document.createElement('a');
+            youtubeLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(song.title + ' ' + song.artist)}`;
+            youtubeLink.target = "_blank";
+            youtubeLink.classList.add('music-link');
+            youtubeLink.innerText = 'YouTube';
+
+            const appleLink = document.createElement('a');
+            appleLink.href = `https://music.apple.com/us/search?term=${encodeURIComponent(song.title + ' ' + song.artist)}`;
+            appleLink.target = "_blank";
+            appleLink.classList.add('music-link');
+            appleLink.innerText = 'Apple Music';
+
+            links.append(spotifyLink, youtubeLink, appleLink);
+            recommendation.append(title, moodNote, links);
+            botMessageDiv.appendChild(recommendation);
+            chatMessages.appendChild(botMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     </script>
 </body>
 </html>
